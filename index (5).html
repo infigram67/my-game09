@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reich & Roses — Политическая Новелла</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ЭКРАН ЗАГРУЗКИ -->
+<div id="loadingScreen" class="screen active">
+    <div class="loading-content">
+        <div class="iron-cross"></div>
+        <h1 class="game-title">REICH & ROSES</h1>
+        <p class="game-subtitle">Политическая Визуальная Новелла</p>
+        <div class="loading-bar"><div class="loading-fill" id="loadingFill"></div></div>
+        <p class="loading-text" id="loadingText">Загрузка истории...</p>
+    </div>
+</div>
+
+<!-- ГЛАВНОЕ МЕНЮ -->
+<div id="mainMenu" class="screen">
+    <div class="menu-bg">
+        <div class="menu-overlay"></div>
+        <div class="menu-content">
+            <div class="menu-title-block">
+                <div class="title-ornament">✦ ✦ ✦</div>
+                <h1>REICH & ROSES</h1>
+                <p class="subtitle">Германия, 1914–1945</p>
+                <div class="title-ornament">✦ ✦ ✦</div>
+            </div>
+            <div class="menu-buttons">
+                <button class="menu-btn primary-btn" onclick="startNewGame()">⚔ Начать Игру</button>
+                <button class="menu-btn" onclick="loadGame()">📖 Продолжить</button>
+                <button class="menu-btn" onclick="showGallery()">🎭 Галерея</button>
+                <button class="menu-btn" onclick="showCredits()">📜 Об Игре</button>
+            </div>
+            <p class="menu-warning">18+ | Историческая художественная литература | Содержит темы войны и политики</p>
+        </div>
+    </div>
+</div>
+
+<!-- СОЗДАНИЕ ПЕРСОНАЖА -->
+<div id="charCreation" class="screen">
+    <div class="creation-bg">
+        <div class="creation-panel">
+            <h2 class="panel-title">КТО ВЫ?</h2>
+            <p class="panel-sub">Германия, 1914 год. Вы стоите на пороге великих перемен.</p>
+
+            <div class="creation-step active" id="step-gender">
+                <h3>Ваш пол:</h3>
+                <div class="choice-row">
+                    <button class="choice-card" onclick="setGender('male')">
+                        <span class="choice-icon">♂</span>
+                        <span class="choice-label">Мужчина</span>
+                    </button>
+                    <button class="choice-card" onclick="setGender('female')">
+                        <span class="choice-icon">♀</span>
+                        <span class="choice-label">Женщина</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="creation-step" id="step-name">
+                <h3>Ваше имя:</h3>
+                <input type="text" id="playerName" class="name-input" placeholder="Введите имя..." maxlength="20">
+                <button class="next-btn" onclick="setName()">Продолжить →</button>
+            </div>
+
+            <div class="creation-step" id="step-rank">
+                <h3>Ваш политический статус:</h3>
+                <div class="rank-grid">
+                    <button class="rank-card" onclick="setRank('civilian')">
+                        <span class="rank-icon">🏠</span>
+                        <span class="rank-name">Гражданин</span>
+                        <span class="rank-desc">Обычный житель Берлина. Наблюдаете за историей изнутри. Личные отношения на первом плане.</span>
+                    </button>
+                    <button class="rank-card" onclick="setRank('journalist')">
+                        <span class="rank-icon">✒</span>
+                        <span class="rank-name">Журналист</span>
+                        <span class="rank-desc">Вы пишете для газет. Доступ к политикам, влияние на общественное мнение.</span>
+                    </button>
+                    <button class="rank-card" onclick="setRank('officer')">
+                        <span class="rank-icon">⚔</span>
+                        <span class="rank-name">Офицер</span>
+                        <span class="rank-desc">Военный офицер. Участвуете в сражениях, командуете войсками.</span>
+                    </button>
+                    <button class="rank-card" onclick="setRank('diplomat')">
+                        <span class="rank-icon">🎖</span>
+                        <span class="rank-name">Дипломат</span>
+                        <span class="rank-desc">Представитель Германии на мировой арене. Ведёте переговоры с лидерами государств.</span>
+                    </button>
+                    <button class="rank-card" onclick="setRank('politician')">
+                        <span class="rank-icon">👑</span>
+                        <span class="rank-name">Политик</span>
+                        <span class="rank-desc">Депутат рейхстага. Меняете историю изнутри системы. Максимальное влияние на события.</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ОСНОВНОЙ ИГРОВОЙ ЭКРАН -->
+<div id="gameScreen" class="screen">
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <div class="top-bar">
+        <div class="date-display" id="dateDisplay">Январь 1914</div>
+        <div class="top-center">
+            <span class="germany-status" id="germanyStatus">🇩🇪 Германская Империя</span>
+        </div>
+        <div class="top-right">
+            <button class="hud-btn" onclick="toggleRelations()">❤ Отношения</button>
+            <button class="hud-btn" onclick="saveGame()">💾 Сохранить</button>
+            <button class="hud-btn" onclick="showMenu()">☰ Меню</button>
+        </div>
+    </div>
+
+    <!-- ИГРОВАЯ ОБЛАСТЬ -->
+    <div class="game-area">
+        <!-- ФОНОВАЯ СЦЕНА -->
+        <div class="scene-bg" id="sceneBg">
+            <div class="scene-overlay"></div>
+        </div>
+
+        <!-- ПЕРСОНАЖ -->
+        <div class="character-container" id="characterContainer">
+            <div class="character-wrap">
+                <img id="characterSprite" src="" alt="" class="character-sprite">
+                <div class="character-glow" id="characterGlow"></div>
+            </div>
+        </div>
+
+        <!-- ДИАЛОГОВОЕ ОКНО -->
+        <div class="dialogue-area" id="dialogueArea">
+            <div class="speaker-plate" id="speakerPlate">
+                <div class="speaker-avatar-wrap">
+                    <img id="speakerAvatar" src="" alt="" class="speaker-avatar">
+                    <div class="relation-ring" id="relationRing"></div>
+                </div>
+                <div class="speaker-info">
+                    <span class="speaker-name" id="speakerName">—</span>
+                    <div class="relation-bar-mini">
+                        <div class="relation-fill-mini" id="relationFillMini"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dialogue-box" id="dialogueBox">
+                <p class="dialogue-text" id="dialogueText">...</p>
+                <div class="text-cursor" id="textCursor">▮</div>
+            </div>
+        </div>
+
+        <!-- КНОПКА ПРОДОЛЖИТЬ -->
+        <button class="continue-btn" id="continueBtn" onclick="nextDialogue()" style="display:none">
+            <span>Продолжить</span> <span class="arrow-blink">▼</span>
+        </button>
+    </div>
+
+    <!-- ВЫБОРЫ ОТВЕТОВ -->
+    <div class="choices-panel" id="choicesPanel" style="display:none">
+        <div class="choices-label">Ваш ответ:</div>
+        <div class="choices-list" id="choicesList"></div>
+    </div>
+
+    <!-- БОКОВАЯ ПАНЕЛЬ ОТНОШЕНИЙ -->
+    <div class="relations-sidebar" id="relationsSidebar" style="display:none">
+        <h3 class="sidebar-title">❤ Отношения</h3>
+        <div class="relations-list" id="relationsList"></div>
+        <button class="close-sidebar" onclick="toggleRelations()">✕</button>
+    </div>
+
+    <!-- СОБЫТИЙНЫЙ БАННЕР -->
+    <div class="event-banner" id="eventBanner" style="display:none">
+        <div class="event-content">
+            <div class="event-year" id="eventYear"></div>
+            <div class="event-title" id="eventTitle"></div>
+            <div class="event-desc" id="eventDesc"></div>
+            <button class="event-btn" onclick="closeEvent()">Продолжить →</button>
+        </div>
+    </div>
+
+    <!-- НИЖНЯЯ СТРОКА СТАТУСА -->
+    <div class="status-bar">
+        <div class="status-item" id="statusRank">👤 Гражданин</div>
+        <div class="status-item" id="statusInfluence">⚡ Влияние: 0</div>
+        <div class="status-item" id="statusMood">🇩🇪 Настроение: Спокойно</div>
+        <div class="status-item" id="statusYear">📅 1914</div>
+    </div>
+</div>
+
+<!-- ГАЛЕРЕЯ -->
+<div id="galleryScreen" class="screen">
+    <div class="gallery-container">
+        <h2>Галерея персонажей</h2>
+        <div class="gallery-grid" id="galleryGrid"></div>
+        <button class="back-btn" onclick="backToMenu()">← Назад</button>
+    </div>
+</div>
+
+<!-- ОБ ИГРЕ -->
+<div id="creditsScreen" class="screen">
+    <div class="credits-container">
+        <h2>О Игре</h2>
+        <p>REICH & ROSES — историческая визуальная новелла.</p>
+        <p>Все персонажи основаны на реальных исторических фигурах. Игра носит художественный и образовательный характер.</p>
+        <p>События охватывают период 1914–1945 гг.</p>
+        <button class="back-btn" onclick="backToMenu()">← Назад</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
